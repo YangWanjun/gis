@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
 
 from addr.models import Pref
@@ -43,8 +43,9 @@ class Line(BaseModel):
     kana = models.CharField(max_length=80, blank=True, null=True, verbose_name="路線名称(一般・カナ)")
     name_full = models.CharField(max_length=80, blank=True, null=True, verbose_name="路線名称(正式名称)")
     segment = models.CharField(max_length=1, blank=True, null=True, verbose_name="路線区分")
-    lon = models.FloatField(blank=True, null=True, verbose_name="経度", help_text="路線表示時の中央経度")
-    lat = models.FloatField(blank=True, null=True, verbose_name="緯度", help_text="路線表示時の中央緯度")
+    # lon = models.FloatField(blank=True, null=True, verbose_name="経度", help_text="路線表示時の中央経度")
+    # lat = models.FloatField(blank=True, null=True, verbose_name="緯度", help_text="路線表示時の中央緯度")
+    point = models.PointField(blank=True, null=True, verbose_name="座標")
     zoom = models.IntegerField(
         blank=True, null=True, verbose_name="路線表示時のGoogleMap倍率",
         help_text="600x600でおおよそすべてが収まる程度"
@@ -71,8 +72,9 @@ class Station(BaseModel):
     pref = models.ForeignKey(Pref, blank=True, null=True, verbose_name="都道府県")
     post_code = models.CharField(max_length=7, blank=True, null=True, verbose_name="駅郵便番号")
     address = models.CharField(max_length=300, blank=True, null=True, verbose_name="住所")
-    lon = models.FloatField(blank=True, null=True, verbose_name="経度", help_text="世界測地系")
-    lat = models.FloatField(blank=True, null=True, verbose_name="緯度", help_text="世界測地系")
+    # lon = models.FloatField(blank=True, null=True, verbose_name="経度", help_text="世界測地系")
+    # lat = models.FloatField(blank=True, null=True, verbose_name="緯度", help_text="世界測地系")
+    point = models.PointField(blank=True, null=True, verbose_name="座標")
     open_date = models.DateField(blank=True, null=True, verbose_name="開業年月日")
     close_date = models.DateField(blank=True, null=True, verbose_name="廃止年月日")
     status = models.CharField(

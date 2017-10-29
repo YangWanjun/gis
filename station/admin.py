@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib import admin
-
+from django.contrib.gis import admin
 from . import models
 from utils.django_base import BaseAdmin
 
@@ -22,6 +21,7 @@ class LineAdmin(BaseAdmin):
 
 @admin.register(models.Station)
 class StationAdmin(BaseAdmin):
+    default_zoom = 18
     list_display = ('code', 'name')
     search_fields = ('code', 'name')
 

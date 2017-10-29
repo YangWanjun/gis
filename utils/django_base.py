@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.db import models
-from django.contrib import admin
+from django.contrib.gis import admin
 
 
 class PublicManager(models.Manager):
@@ -42,7 +42,7 @@ class BaseModel(models.Model):
         self.save()
 
 
-class BaseAdmin(admin.ModelAdmin):
+class BaseAdmin(admin.OSMGeoAdmin):
 
     def get_actions(self, request):
         actions = super(BaseAdmin, self).get_actions(request)

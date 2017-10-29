@@ -11,6 +11,18 @@ class PrefSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.City
+        fields = '__all__'
+
+
+class AzaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Aza
+        fields = '__all__'
+
+
 class PostcodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Postcode

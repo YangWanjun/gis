@@ -68,8 +68,9 @@ def sync_line(url):
             line['kana'] = row[3]
             line['name_full'] = row[6]
             line['segment'] = row[7]
-            line['lon'] = row[8]
-            line['lat'] = row[9]
+            # line['lon'] = row[8]
+            # line['lat'] = row[9]
+            line['point'] = 'POINT (%s %s)' % (row[8], row[9])
             line['zoom'] = row[10]
             line['status'] = row[11]
             line['sort'] = row[12]
@@ -93,8 +94,9 @@ def sync_station(url):
             line['pref'] = row[6]
             line['post_code'] = re.sub(r'[^0-9]+', '', row[7])
             line['address'] = row[8]
-            line['lon'] = row[9]
-            line['lat'] = row[10]
+            # line['lon'] = row[9]
+            # line['lat'] = row[10]
+            line['point'] = 'POINT (%s %s)' % (row[9], row[10])
             line['open_date'] = row[11]
             line['close_date'] = row[12]
             line['status'] = row[13]
@@ -119,9 +121,47 @@ def sync_station_connection(url):
             save_data(url, station_connection)
 
 
+def sync_city(host_name):
+    path = os.path.join(common.get_data_path(), 'city_code')
+    if not os.path.exists(path):
+        raise FileNotExistsException(path)
+
+    url_add_city = '%s/api/addr/city_list/' % host_name
+    url_add_aza = '%s/api/addr/aza_list/' % host_name
+    for zip_name in os.listdir(path):
+        zip_path = os.path.join(path, zip_name)
+        zip_file = zipfile.ZipFile(zip_path, 'r')
+        for file_name in zip_file.namelist():
+            if os.path.splitext(file_name)[-1] != '.csv':
+                continue
+            text = zip_file.read(file_name)
+            reader = csv.reader(StringIO.StringIO(text))
+            header = next(reader)  # without header
+            prev_city_code = ''
+            for row in reader:
+                if prev_city_code != row[2]:
+                    city = dict()
+                    city['pref'] = row[0]
+                    city['code'] = row[2]
+                    city['name'] = row[3].decode('shift-jis')
+                    save_data(url_add_city, city)
+                    prev_city_code = row[2]
+                aza = dict()
+                aza['pref'] = row[0]
+                aza['city'] = row[2]
+                aza['code'] = row[4]
+                try:
+                    aza['name'] = row[5].decode('shift-jis')
+                except:
+                    print aza['code'], "文字コードエラー"
+                    aza['name'] = row[5]
+                aza['point'] = 'POINT (%s %s)' % (row[7], row[6])
+                save_data(url_add_aza, aza)
+
+
 def save_data(post_url, data):
     r = requests.post(post_url, data=data)
-    if  200 <= r.status_code < 300:
+    if 200 <= r.status_code < 300:
         # 2xx Success 成功
         pass
     elif 300 <= r.status_code < 400:

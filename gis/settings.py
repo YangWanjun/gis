@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'rest_framework',
+    'rest_framework_gis',
     'django_filters',
     'guardian',
-    'loader',
     'addr',
     'station',
 ]
@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'GIS',
         'USER': 'dev',
         'PASSWORD': 'root',
-        'HOST': '192.168.99.100',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }

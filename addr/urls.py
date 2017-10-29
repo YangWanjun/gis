@@ -6,4 +6,6 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'pref_list', views.PrefViewSet)
+router.register(r'city_list', views.CityViewSet)
+router.register(r'aza_list', views.AzaViewSet)
 router.register(r'postcodes', views.PostcodeViewSet)

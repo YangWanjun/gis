@@ -1,21 +1,54 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.core.validators import RegexValidator
 
 from utils.django_base import BaseModel
 
+
 # Create your models here.
 class Pref(BaseModel):
-    code = models.CharField(max_length=2, verbose_name="都道府県コード")
-    name = models.CharField(max_length=10, verbose_name="都道府県名称")
+    code = models.CharField(max_length=2, primary_key=True, verbose_name="都道府県コード")
+    name = models.CharField(max_length=20, unique=True, verbose_name="都道府県名称")
 
     class Meta:
         db_table = 'gis_pref'
         ordering = ['code']
         verbose_name = "都道府県"
         verbose_name_plural = "都道府県一覧"
+
+    def __unicode__(self):
+        return self.name
+
+
+class City(BaseModel):
+    code = models.CharField(max_length=5, primary_key=True, verbose_name="市区町村コード")
+    name = models.CharField(max_length=30, verbose_name="市区町村名称")
+    pref = models.ForeignKey(Pref, verbose_name="都道府県")
+
+    class Meta:
+        db_table = 'gis_city'
+        ordering = ['code']
+        verbose_name = "市区町村"
+        verbose_name_plural = "市区町村一覧"
+
+    def __unicode__(self):
+        return self.name
+
+
+class Aza(BaseModel):
+    code = models.CharField(max_length=12, primary_key=True, verbose_name="大字町丁目コード")
+    name = models.CharField(max_length=30, verbose_name="大字町丁目名称")
+    city = models.ForeignKey(City, verbose_name="市区町村")
+    pref = models.ForeignKey(Pref, verbose_name="都道府県")
+    point = models.PointField(blank=True, null=True, verbose_name="座標")
+
+    class Meta:
+        db_table = 'gis_aza'
+        ordering = ['code']
+        verbose_name = "大字町丁目"
+        verbose_name_plural = "大字町丁目一覧"
 
     def __unicode__(self):
         return self.name
@@ -49,7 +82,8 @@ class Postcode(BaseModel):
 
     class Meta:
         db_table = 'gis_post_code'
-        verbose_name = verbose_name_plural = "郵便番号"
+        verbose_name = "郵便番号"
+        verbose_name_plural = '郵便番号一覧'
 
     def __unicode__(self):
         return self.post_code
