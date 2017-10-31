@@ -25,7 +25,11 @@ class Pref(BaseModel):
 class City(BaseModel):
     code = models.CharField(max_length=5, primary_key=True, verbose_name="市区町村コード")
     name = models.CharField(max_length=30, verbose_name="市区町村名称")
+    name_en = models.CharField(max_length=30, blank=True, null=True, verbose_name="市区町村名（英語）")
     pref = models.ForeignKey(Pref, verbose_name="都道府県")
+    mpoly = models.MultiPolygonField(srid=4326, blank=True, null=True)
+    people_count = models.IntegerField(blank=True, null=True, verbose_name="人口")
+    home_count = models.IntegerField(blank=True, null=True, verbose_name="世帯数")
 
     class Meta:
         db_table = 'gis_city'
