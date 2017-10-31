@@ -22,6 +22,6 @@ from station.urls import router as station_router
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
-    url(r'api/addr/', include(addr_router.urls)),
-    url(r'api/station/', include(station_router.urls)),
+    url(r'api/', include(addr_router.urls)),
+    url(r'api/', include(station_router.urls)),
 ]

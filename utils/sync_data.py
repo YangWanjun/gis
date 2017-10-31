@@ -6,12 +6,19 @@ import StringIO
 import csv
 import requests
 import re
+import urlparse
 
-from . import common
-from .errors import FileNotExistsException
+import common
+from errors import FileNotExistsException, SettingException
 
 
-def sync_pref(url):
+HOST_NAME = 'http://127.0.0.1:8001'
+
+
+def sync_pref():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_pref = urlparse.urljoin(HOST_NAME, '/api/pref_list/')
     path = os.path.join(common.get_data_path(), 'pref.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -24,10 +31,13 @@ def sync_pref(url):
             code, name = row[0], row[1]
             print code, name
             code = '%02d' % int(code)
-            save_data(url, {'code': code, 'name': name})
+            save_data(url_add_pref, {'code': code, 'name': name})
 
 
-def sync_company(url):
+def sync_company():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_company = urlparse.urljoin(HOST_NAME, '/api/company_list/')
     path = os.path.join(common.get_data_path(), 'company.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -48,10 +58,13 @@ def sync_company(url):
             company['segment'] = row[7]
             company['status'] = row[8]
             company['sort'] = row[9]
-            save_data(url, company)
+            save_data(url_add_company, company)
 
 
-def sync_line(url):
+def sync_line():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_line = urlparse.urljoin(HOST_NAME, '/api/line_list/')
     path = os.path.join(common.get_data_path(), 'line.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -74,10 +87,13 @@ def sync_line(url):
             line['zoom'] = row[10]
             line['status'] = row[11]
             line['sort'] = row[12]
-            save_data(url, line)
+            save_data(url_add_line, line)
 
 
-def sync_station(url):
+def sync_station():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_station = urlparse.urljoin(HOST_NAME, '/api/station_list/')
     path = os.path.join(common.get_data_path(), 'station.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -91,7 +107,7 @@ def sync_station(url):
             line['code'] = row[0]
             line['name'] = row[2]
             line['line'] = row[5]
-            line['pref'] = row[6]
+            line['pref'] = '%02d' % int(row[6])
             line['post_code'] = re.sub(r'[^0-9]+', '', row[7])
             line['address'] = row[8]
             # line['lon'] = row[9]
@@ -101,10 +117,13 @@ def sync_station(url):
             line['close_date'] = row[12]
             line['status'] = row[13]
             line['sort'] = row[14]
-            save_data(url, line)
+            save_data(url_add_station, line)
 
 
-def sync_station_connection(url):
+def sync_station_connection():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_join = urlparse.urljoin(HOST_NAME, '/api/station_connection_list/')
     path = os.path.join(common.get_data_path(), 'join.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -118,17 +137,21 @@ def sync_station_connection(url):
             station_connection['line'] = row[0]
             station_connection['station1'] = row[1]
             station_connection['station2'] = row[2]
-            save_data(url, station_connection)
+            save_data(url_add_join, station_connection)
 
 
-def sync_city(host_name):
+def sync_city():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
     path = os.path.join(common.get_data_path(), 'city_code')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
 
-    url_add_city = '%s/api/addr/city_list/' % host_name
-    url_add_aza = '%s/api/addr/aza_list/' % host_name
+    url_add_city = urlparse.urljoin(HOST_NAME, '/api/city_list/')
+    url_add_aza = urlparse.urljoin(HOST_NAME, '/api/aza_list/')
     for zip_name in os.listdir(path):
+        if os.path.splitext(zip_name)[-1] != '.zip':
+            continue
         zip_path = os.path.join(path, zip_name)
         zip_file = zipfile.ZipFile(zip_path, 'r')
         for file_name in zip_file.namelist():
@@ -143,7 +166,11 @@ def sync_city(host_name):
                     city = dict()
                     city['pref'] = row[0]
                     city['code'] = row[2]
-                    city['name'] = row[3].decode('shift-jis')
+                    try:
+                        city['name'] = row[3].decode('cp932')
+                    except:
+                        print city['code'], "市区町村名文字コードエラー"
+                        city['name'] = row[3]
                     save_data(url_add_city, city)
                     prev_city_code = row[2]
                 aza = dict()
@@ -151,9 +178,9 @@ def sync_city(host_name):
                 aza['city'] = row[2]
                 aza['code'] = row[4]
                 try:
-                    aza['name'] = row[5].decode('shift-jis')
+                    aza['name'] = row[5].decode('cp932')
                 except:
-                    print aza['code'], "文字コードエラー"
+                    print aza['code'], "町丁字文字コードエラー"
                     aza['name'] = row[5]
                 aza['point'] = 'POINT (%s %s)' % (row[7], row[6])
                 save_data(url_add_aza, aza)
@@ -173,3 +200,7 @@ def save_data(post_url, data):
     elif 500 <= r.status_code:
         # 5xx Server Error サーバエラー
         print r.content
+
+
+if __name__ == '__main__':
+    sync_city()
