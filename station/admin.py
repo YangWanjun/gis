@@ -22,7 +22,7 @@ class LineAdmin(BaseAdmin):
 @admin.register(models.Station)
 class StationAdmin(BaseAdmin):
     default_zoom = 18
-    list_display = ('code', 'name')
+    list_display = ('code', 'name', 'line', 'pref', 'post_code', 'address')
     search_fields = ('code', 'name')
 
 

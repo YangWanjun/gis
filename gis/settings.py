@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'django_filters',
     'guardian',
-    'addr',
-    'station',
+    'addr.apps.AddrConfig',
+    'station.apps.StationConfig',
 ]
 
 MIDDLEWARE = [
