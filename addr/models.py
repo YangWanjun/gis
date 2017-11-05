@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, validate_comma_separated_integer_list
 
 from utils.django_base import BaseModel
 
@@ -63,14 +63,18 @@ class Postcode(BaseModel):
         max_length=5, validators=(RegexValidator(regex=r"^\d{5}$"),), verbose_name=u"市区町村コード"
     )
     post_code = models.CharField(
-        max_length=7, unique=True, validators=(RegexValidator(regex=r"^\d{7}$"),), verbose_name=u"郵便番号"
+        max_length=7, validators=(RegexValidator(regex=r"^\d{7}$"),), verbose_name=u"郵便番号"
     )
     pref_name = models.CharField(max_length=15, verbose_name="都道府県名称")
-    city_name = models.CharField(max_length=15, verbose_name="市区町村名称")
+    city_name = models.CharField(max_length=50, verbose_name="市区町村名称")
     town_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="町域名称")
-    pref_kana = models.CharField(max_length=15, verbose_name="度道府県カナ")
-    city_kana = models.CharField(max_length=15, verbose_name="市区町村カナ")
-    town_kana = models.CharField(max_length=50, blank=True, null=True, verbose_name="町域カナ")
+    pref_kana = models.CharField(max_length=50, verbose_name="度道府県カナ")
+    city_kana = models.CharField(max_length=50, verbose_name="市区町村カナ")
+    town_kana = models.CharField(max_length=100, blank=True, null=True, verbose_name="町域カナ")
+    chome_list = models.CharField(
+        max_length=200, blank=True, null=True,
+        validators=[validate_comma_separated_integer_list], verbose_name="丁目リスト"
+    )
     is_partial = models.BooleanField(
         default=False, verbose_name="町域の一部",
         help_text="一町域が二以上の郵便番号で表される場合の表示（「1」は該当、「0」は該当せず）"

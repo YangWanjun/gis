@@ -182,22 +182,14 @@ def sync_city():
                     city = dict()
                     city['pref'] = row[0]
                     city['code'] = row[2]
-                    try:
-                        city['name'] = row[3].decode('cp932')
-                    except:
-                        print city['code'], "市区町村名文字コードエラー"
-                        city['name'] = row[3]
+                    city['name'] = row[3].decode('cp932')
                     save_data(city, url_add_city)
                     prev_city_code = row[2]
                 aza = dict()
                 aza['pref'] = row[0]
                 aza['city'] = row[2]
                 aza['code'] = row[4]
-                try:
-                    aza['name'] = row[5].decode('cp932')
-                except:
-                    print aza['code'], "町丁字文字コードエラー"
-                    aza['name'] = row[5]
+                aza['name'] = row[5].decode('cp932')
                 aza['point'] = 'POINT (%s %s)' % (row[7], row[6])
                 save_data(aza, url_add_aza)
 
@@ -230,7 +222,6 @@ def sync_city_polygon():
                             mpoly.add(feature.geom)
                         else:
                             mpoly = feature.geom
-                        # print city_code, feature.get('SIKUCHOSON'), feature.get('KEN'), feature.get('CITY_ENG'), people_count, home_count
                         json = requests.get(url_get_city, {'code': city_code}).json()
                         if json['results']:
                             city = json['results'][0]
@@ -247,6 +238,50 @@ def sync_city_polygon():
     except Exception as ex:
         del_temp_dir(temp_dir)
         print unicode(ex)
+
+
+def sync_post_code():
+    if not HOST_NAME:
+        raise SettingException('HOST_NAME')
+    url_add_post_code = urlparse.urljoin(HOST_NAME, '/api/postcode_list/')
+    path = os.path.join(common.get_data_path(), 'ken_all.zip')
+    if not os.path.exists(path):
+        raise FileNotExistsException(path)
+    zip_file = zipfile.ZipFile(path, 'r')
+    for file_name in zip_file.namelist():
+        if os.path.splitext(file_name)[-1].lower() != '.csv':
+            continue
+        text = zip_file.read(file_name)
+        reader = csv.reader(StringIO.StringIO(text))
+        for row in reader:
+            post_code = dict()
+            post_code['city_code'] = row[0]
+            post_code['post_code'] = row[2]
+            post_code['pref_kana'] = row[3].decode('shift-jis')
+            post_code['pref_name'] = row[6].decode('shift-jis')
+            post_code['city_kana'] = row[4].decode('shift-jis')
+            post_code['city_name'] = row[7].decode('shift-jis')
+            if row[8].decode('shift-jis') != "以下に掲載がない場合":
+                post_code['town_kana'] = re.sub(r'\(.+\)', '', row[5].decode('shift-jis'))
+                post_code['town_name'] = re.sub(r'（.+）', '', row[8].decode('shift-jis'))
+                m = re.search(r"（([0-9０-９]+)〜([0-9０-９]+).+）", row[8].decode('shift-jis'))
+                if m:
+                    start_chome, end_chome = m.groups()
+                    try:
+                        start_chome = int(common.to_half_size(start_chome))
+                        end_chome = int(common.to_half_size(end_chome))
+                        chome_list = ",".join([str(i) for i in range(start_chome, end_chome + 1)])
+                        if len(chome_list) > 200:
+                            print post_code['post_code'], post_code['city_name'], row[8].decode('shift-jis'), \
+                                "丁目リストが多すぎ。"
+                        else:
+                            post_code['chome_list'] = chome_list
+                    except Exception as ex:
+                        print row[2], m.group(), unicode(ex)
+            post_code['is_partial'] = row[9]
+            post_code['is_multi_chome'] = row[11]
+            post_code['is_multi_town'] = row[12]
+            save_data(post_code, post_url=url_add_post_code)
 
 
 def save_data(data, post_url=None, put_url=None):

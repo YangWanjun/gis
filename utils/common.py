@@ -17,3 +17,49 @@ def get_data_path():
     :return:
     """
     return os.path.join(get_root_path(), 'data')
+
+
+def to_half_size(ustring):
+    """文字列を半角に変換する
+
+    :param ustring:
+    :return:
+    """
+    if not ustring:
+        return ustring
+
+    rstring = ""
+    for uchar in ustring:
+        inside_code = ord(uchar)
+        if inside_code == 0x3000:
+            # 全角スペース(0x3000)を半角スペース(0x0020)に変換
+            inside_code = 0x0020
+        else:
+            inside_code -= 0xfee0
+        if inside_code < 0x0020 or inside_code > 0x7e:
+            rstring += uchar
+        if inside_code > 0:
+            rstring += unichr(inside_code)
+    return rstring
+
+
+def to_full_size(ustring):
+    """文字列を全角に変換する
+
+    :param ustring:
+    :return:
+    """
+    if not ustring:
+        return ustring
+
+    rstring = ""
+    for uchar in ustring:
+        inside_code = ord(uchar)
+        if inside_code < 0x0020 or inside_code > 0x7e:
+            rstring += uchar
+        if inside_code == 0x0020:
+            inside_code = 0x3000
+        else:
+            inside_code += 0xfee0
+        rstring += unichr(inside_code)
+    return rstring

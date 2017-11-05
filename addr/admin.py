@@ -29,4 +29,6 @@ class AzaAdmin(BaseAdmin):
 
 @admin.register(models.Postcode)
 class PostcodeAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('city_code', 'post_code', 'pref_name', 'city_name', 'town_name')
+    list_display_links = ('post_code',)
+    search_fields = ('city_code', 'post_code', 'pref_name', 'city_name', 'town_name')
