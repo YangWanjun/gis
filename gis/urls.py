@@ -18,10 +18,12 @@ from django.contrib import admin
 
 from addr.urls import router as addr_router
 from station.urls import router as station_router
+from geocode import urls as geocode_url
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'api/', include(addr_router.urls)),
     url(r'api/', include(station_router.urls)),
+    url(r'api/', include(geocode_url)),
 ]
