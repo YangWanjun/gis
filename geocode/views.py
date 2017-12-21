@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import googlemaps
 
 from django.conf import settings
 
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import viewsets
 
 
 # Create your views here.
-class GeocodeView(APIView):
-    def get(self, request, format=None):
+class GeocodeViewSet(viewsets.ViewSet):
+
+    def list(self, request, format=None):
         address = request.GET.get('address', None)
         coordinate = {'lng': 0, 'lat': 0}
         if address:

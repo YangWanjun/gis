@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from rest_framework import  viewsets, filters
+from rest_framework import viewsets, filters
 
 from . import models
 from . import serializer
+
 
 # Create your views here.
 class CompanyViewSet(viewsets.ModelViewSet):

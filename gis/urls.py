@@ -16,14 +16,28 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from addr.urls import router as addr_router
-from station.urls import router as station_router
-from geocode import urls as geocode_url
+from rest_framework import routers
+
+from addr import views as address_views
+from station import views as station_views
+from geocode import views as geocode_views
+
+
+router = routers.DefaultRouter()
+router.register(r'pref_list', address_views.PrefViewSet)
+router.register(r'city_list', address_views.CityViewSet)
+router.register(r'aza_list', address_views.AzaViewSet)
+router.register(r'postcode_list', address_views.PostcodeViewSet)
+
+router.register(r'company_list', station_views.CompanyViewSet)
+router.register(r'line_list', station_views.LineViewSet)
+router.register(r'station_list', station_views.StationViewSet)
+router.register(r'station_connection_list', station_views.StationConnectionViewSet)
+
+router.register(r'geocode', geocode_views.GeocodeViewSet, base_name='geocode')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
-    url(r'api/', include(addr_router.urls)),
-    url(r'api/', include(station_router.urls)),
-    url(r'api/', include(geocode_url)),
+    url(r'^api/', include(router.urls)),
 ]

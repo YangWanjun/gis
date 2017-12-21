@@ -39,7 +39,7 @@ def to_half_size(ustring):
         if inside_code < 0x0020 or inside_code > 0x7e:
             rstring += uchar
         if inside_code > 0:
-            rstring += unichr(inside_code)
+            rstring += chr(inside_code)
     return rstring
 
 
@@ -61,5 +61,5 @@ def to_full_size(ustring):
             inside_code = 0x3000
         else:
             inside_code += 0xfee0
-        rstring += unichr(inside_code)
+        rstring += chr(inside_code)
     return rstring

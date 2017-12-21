@@ -2,19 +2,18 @@
 from __future__ import unicode_literals
 import os
 import zipfile
-import StringIO
+import io
 import csv
 import requests
 import re
-import urlparse
 import datetime
-
-import common
+from urllib.parse import urljoin
 
 from django.contrib.gis.gdal import DataSource
-from django.contrib.gis.gdal.geometries import MultiPolygon, Polygon, OGRGeometry, OGRGeomType
+from django.contrib.gis.gdal.geometries import Polygon, OGRGeometry, OGRGeomType
 
-from errors import FileNotExistsException, SettingException
+from . import common
+from .errors import FileNotExistsException, SettingException
 
 
 HOST_NAME = 'http://127.0.0.1:8001'
@@ -34,18 +33,18 @@ def del_temp_dir(path):
 def sync_pref():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_pref = urlparse.urljoin(HOST_NAME, '/api/pref_list/')
+    url_add_pref = urljoin(HOST_NAME, '/api/pref_list/')
     path = os.path.join(common.get_data_path(), 'pref.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
     zip_file = zipfile.ZipFile(path, 'r')
     for file_name in zip_file.namelist():
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         header = next(reader)  # without header
         for row in reader:
             code, name = row[0], row[1]
-            print code, name
+            print(code, name)
             code = '%02d' % int(code)
             save_data({'code': code, 'name': name}, url_add_pref)
 
@@ -53,14 +52,14 @@ def sync_pref():
 def sync_company():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_company = urlparse.urljoin(HOST_NAME, '/api/company_list/')
+    url_add_company = urljoin(HOST_NAME, '/api/company_list/')
     path = os.path.join(common.get_data_path(), 'company.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
     zip_file = zipfile.ZipFile(path, 'r')
     for file_name in zip_file.namelist():
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         header = next(reader)  # without header
         for row in reader:
             company = dict()
@@ -80,14 +79,14 @@ def sync_company():
 def sync_line():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_line = urlparse.urljoin(HOST_NAME, '/api/line_list/')
+    url_add_line = urljoin(HOST_NAME, '/api/line_list/')
     path = os.path.join(common.get_data_path(), 'line.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
     zip_file = zipfile.ZipFile(path, 'r')
     for file_name in zip_file.namelist():
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         header = next(reader)  # without header
         for row in reader:
             line = dict()
@@ -109,14 +108,14 @@ def sync_line():
 def sync_station():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_station = urlparse.urljoin(HOST_NAME, '/api/station_list/')
+    url_add_station = urljoin(HOST_NAME, '/api/station_list/')
     path = os.path.join(common.get_data_path(), 'station.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
     zip_file = zipfile.ZipFile(path, 'r')
     for file_name in zip_file.namelist():
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         header = next(reader)  # without header
         for row in reader:
             line = dict()
@@ -139,14 +138,14 @@ def sync_station():
 def sync_station_connection():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_join = urlparse.urljoin(HOST_NAME, '/api/station_connection_list/')
+    url_add_join = urljoin(HOST_NAME, '/api/station_connection_list/')
     path = os.path.join(common.get_data_path(), 'join.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
     zip_file = zipfile.ZipFile(path, 'r')
     for file_name in zip_file.namelist():
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         header = next(reader)  # without header
         for row in reader:
             station_connection = dict()
@@ -163,8 +162,8 @@ def sync_city():
     if not os.path.exists(path):
         raise FileNotExistsException(path)
 
-    url_add_city = urlparse.urljoin(HOST_NAME, '/api/city_list/')
-    url_add_aza = urlparse.urljoin(HOST_NAME, '/api/aza_list/')
+    url_add_city = urljoin(HOST_NAME, '/api/city_list/')
+    url_add_aza = urljoin(HOST_NAME, '/api/aza_list/')
     for zip_name in os.listdir(path):
         if os.path.splitext(zip_name)[-1] != '.zip':
             continue
@@ -174,7 +173,7 @@ def sync_city():
             if os.path.splitext(file_name)[-1] != '.csv':
                 continue
             text = zip_file.read(file_name)
-            reader = csv.reader(StringIO.StringIO(text))
+            reader = csv.reader(io.StringIO(text))
             header = next(reader)  # without header
             prev_city_code = ''
             for row in reader:
@@ -197,7 +196,7 @@ def sync_city():
 def sync_city_polygon():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_get_city = urlparse.urljoin(HOST_NAME, '/api/city_list/')
+    url_get_city = urljoin(HOST_NAME, '/api/city_list/')
     path = os.path.join(common.get_data_path(), 'japan_ver81.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -212,7 +211,7 @@ def sync_city_polygon():
                     for i, feature in enumerate(layer):
                         city_code = feature.get('JCODE')
                         if not city_code:
-                            print i, '市区町村コードがシェープファイルから取得できません。'
+                            print(i, '市区町村コードがシェープファイルから取得できません。')
                             continue
                         city_name_en = feature.get('CITY_ENG').split('-')[0] if feature.get('CITY_ENG') else None
                         people_count = feature.get('P_NUM') or 0
@@ -231,19 +230,19 @@ def sync_city_polygon():
                                 'home_count': home_count,
                                 'mpoly': mpoly.wkt,
                             })
-                            url_put_city = urlparse.urljoin(HOST_NAME, '/api/city_list/%s/' % city_code)
+                            url_put_city = urljoin(HOST_NAME, '/api/city_list/%s/' % city_code)
                             save_data(city, put_url=url_put_city)
                         else:
-                            print city_code, "市区町村コードがＤＢから取得できません。"
+                            print(city_code, "市区町村コードがＤＢから取得できません。")
     except Exception as ex:
         del_temp_dir(temp_dir)
-        print unicode(ex)
+        print(ex)
 
 
 def sync_post_code():
     if not HOST_NAME:
         raise SettingException('HOST_NAME')
-    url_add_post_code = urlparse.urljoin(HOST_NAME, '/api/postcode_list/')
+    url_add_post_code = urljoin(HOST_NAME, '/api/postcode_list/')
     path = os.path.join(common.get_data_path(), 'ken_all.zip')
     if not os.path.exists(path):
         raise FileNotExistsException(path)
@@ -252,7 +251,7 @@ def sync_post_code():
         if os.path.splitext(file_name)[-1].lower() != '.csv':
             continue
         text = zip_file.read(file_name)
-        reader = csv.reader(StringIO.StringIO(text))
+        reader = csv.reader(io.StringIO(text))
         for row in reader:
             post_code = dict()
             post_code['city_code'] = row[0]
@@ -272,12 +271,12 @@ def sync_post_code():
                         end_chome = int(common.to_half_size(end_chome))
                         chome_list = ",".join([str(i) for i in range(start_chome, end_chome + 1)])
                         if len(chome_list) > 200:
-                            print post_code['post_code'], post_code['city_name'], row[8].decode('shift-jis'), \
-                                "丁目リストが多すぎ。"
+                            print(post_code['post_code'], post_code['city_name'],
+                                  row[8].decode('shift-jis'), "丁目リストが多すぎ。")
                         else:
                             post_code['chome_list'] = chome_list
                     except Exception as ex:
-                        print row[2], m.group(), unicode(ex)
+                        print(row[2], m.group(), ex)
             post_code['is_partial'] = row[9]
             post_code['is_multi_chome'] = row[11]
             post_code['is_multi_town'] = row[12]
@@ -299,10 +298,10 @@ def save_data(data, post_url=None, put_url=None):
         pass
     elif 400 <= r.status_code < 500:
         # 4xx Client Error クライアントエラー
-        print r.content
+        print(r.content)
     elif 500 <= r.status_code:
         # 5xx Server Error サーバエラー
-        print r.content
+        print(r.content)
 
 
 if __name__ == '__main__':
