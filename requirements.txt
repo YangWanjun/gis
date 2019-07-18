@@ -1,6 +1,0 @@
-django==1.11.4
-googlemaps=2.5.1
-django-guardian=1.4.9
-django-rest-framework=3.6.4
-psycopg2=2.7.3.2
-requests=2.18.4
