@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'rest_framework',
-    'address.apps.AddressConfig',
+    'addr.apps.AddressConfig',
 ]
 
 MIDDLEWARE = [

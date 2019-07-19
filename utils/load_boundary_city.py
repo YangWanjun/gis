@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.gis.utils import LayerMapping
-from address.models import City
+from addr.models import City
 
 
 boundary_mapping = {

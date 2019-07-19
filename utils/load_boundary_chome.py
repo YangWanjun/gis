@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.gis.utils import LayerMapping
-from address.models import Chome
+from addr.models import Chome
 
 
 boundary_mapping = {
