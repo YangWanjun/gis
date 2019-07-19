@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AddressConfig(AppConfig):
+class AddrConfig(AppConfig):
     name = 'addr'
     verbose_name = '住所'

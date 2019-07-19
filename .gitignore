@@ -101,6 +101,5 @@ ENV/
 .mypy_cache/
 
 .idea/
-AzaAddress/
-GIS_AZA/
-migrations/
+*/migrations/*
+!__init__.py

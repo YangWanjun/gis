@@ -25,7 +25,7 @@ SECRET_KEY = 'ura6x!1)_3wddl@(r2@6-a8w6!um4&ny^+)4ki8k(m+7(%0@jd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.99.100',]
+ALLOWED_HOSTS = ['192.168.99.100', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'rest_framework',
-    'addr.apps.AddressConfig',
+    'addr.apps.AddrConfig',
 ]
 
 MIDDLEWARE = [
