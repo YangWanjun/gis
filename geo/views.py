@@ -1,7 +1,7 @@
 from . import biz
 from utils import constants, common
 from utils.errors import CustomException
-from utils.rest_base import BaseApiView
+from utils.base_rest import BaseApiView
 
 
 # Create your views here.

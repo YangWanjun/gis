@@ -5,6 +5,7 @@ SRID_TRANSFORM_CATEGORY_POINT = 'point'
 
 ERROR_FIELD_REQUIRED = '{name} は必須項目です。'
 ERROR_REQUIRED_DIGIT = '{name} は数字でなければなりません。'
+ERROR_INVALID_LAYER_SEARCH = 'パラメーターが不正です、zoomとboundaryが必要です。'
 
 CHOICE_CHOME_CATEGORY = (
     (8104, '町丁・字等'),

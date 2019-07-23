@@ -90,7 +90,7 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'utils.rest_base.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'utils.base_rest.custom_exception_handler',
 }
 
 # Password validation
