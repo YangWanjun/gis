@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 # from rest_framework import routers
 #
@@ -23,6 +24,7 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),
     # url(r'^api/', include(router.urls)),
     url(r'^api/geo/', include('geo.urls')),
 ]
