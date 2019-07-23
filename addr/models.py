@@ -7,18 +7,21 @@ from utils.models import BaseModel
 
 # Create your models here.
 class Pref(BaseModel):
-    code = models.CharField(max_length=2, primary_key=True, verbose_name="都道府県コード")
-    name = models.CharField(max_length=20, unique=True, verbose_name="都道府県名称")
+    pref_code = models.CharField(max_length=2, primary_key=True, verbose_name="都道府県番号")
+    pref_name = models.CharField(max_length=20, unique=True, verbose_name="都道府県名称")
+    people_count = models.IntegerField(blank=True, null=True, verbose_name="人口")
+    family_count = models.IntegerField(blank=True, null=True, verbose_name="世帯数")
+    mpoly = models.MultiPolygonField(srid=4326, blank=True, null=True)
 
     class Meta:
         db_table = 'gis_pref'
         default_permissions = ()
-        ordering = ('code',)
+        ordering = ('pref_code',)
         verbose_name = "都道府県"
         verbose_name_plural = "都道府県一覧"
 
     def __str__(self):
-        return self.name
+        return self.pref_name
 
 
 class City(BaseModel):
