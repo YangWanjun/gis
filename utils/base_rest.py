@@ -8,7 +8,7 @@ from rest_framework.views import APIView, exception_handler
 from rest_framework.response import Response
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from . import constants
+from . import constants, common
 from .errors import CustomException
 
 
@@ -43,8 +43,13 @@ class GeoSearchMixin(object):
 
     def check_boundary(self, request, *args, **kwargs):
         request = self.initialize_request(request, *args, **kwargs)
-        zoom = request.data.get('zoom', None) or request.GET.get('zoom', None)
-        boundary = request.data.get('boundary', None) or request.GET.get('boundary', None)
+        if request.data:
+            zoom = request.data.get('zoom', None)
+            boundary = request.data.get('boundary', None)
+        else:
+            params = common.parse_querystring(request.query_params)
+            zoom = params.get('zoom', None)
+            boundary = params.get('boundary', None)
         if not zoom or not boundary:
             self.headers = self.default_response_headers  # deprecate?
             raise CustomException(constants.ERROR_INVALID_LAYER_SEARCH)

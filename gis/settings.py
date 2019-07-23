@@ -26,6 +26,11 @@ SECRET_KEY = 'ura6x!1)_3wddl@(r2@6-a8w6!um4&ny^+)4ki8k(m+7(%0@jd'
 DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.99.100', 'localhost', '127.0.0.1']
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://192.168.99.100:8001',
+)
 
 
 # Application definition
@@ -38,11 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'corsheaders',
     'rest_framework',
     'addr.apps.AddrConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
