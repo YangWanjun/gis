@@ -1,8 +1,15 @@
 from . import models
-from utils.base_rest import BaseGeoFeatureModelSerializer
+from utils.base_rest import BaseGeoFeatureModelSerializer, BaseModelSerializer
 
 
-class PrefSerializer(BaseGeoFeatureModelSerializer):
+class PrefSerializer(BaseModelSerializer):
+
+    class Meta:
+        model = models.Pref
+        exclude = ('mpoly',)
+
+
+class PrefLayerSerializer(BaseGeoFeatureModelSerializer):
 
     class Meta:
         model = models.Pref
@@ -10,7 +17,14 @@ class PrefSerializer(BaseGeoFeatureModelSerializer):
         fields = '__all__'
 
 
-class CitySerializer(BaseGeoFeatureModelSerializer):
+class CitySerializer(BaseModelSerializer):
+
+    class Meta:
+        model = models.City
+        exclude = ('mpoly',)
+
+
+class CityLayerSerializer(BaseGeoFeatureModelSerializer):
 
     class Meta:
         model = models.City
