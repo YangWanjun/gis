@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'addr.apps.AddrConfig',
+    'station.apps.StationConfig',
 ]
 
 MIDDLEWARE = [
