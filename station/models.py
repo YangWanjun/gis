@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 
 from utils import constants
-from utils.models import BaseModel
+from utils.base_models import BaseModel
 
 
 # Create your models here.
@@ -36,7 +36,7 @@ class Route(BaseModel):
         primary_key=True, verbose_name="路線コード",
         help_text="整数5桁　鉄道コード + エリアコード + 連番　※新幹線は4桁"
     )
-    company_code = models.IntegerField(verbose_name="事業者コード")
+    company = models.ForeignKey(Company, db_column='company_code', on_delete=models.PROTECT, verbose_name="事業者コード")
     line_name = models.CharField(max_length=80, verbose_name="路線名称")
     line_kana = models.CharField(max_length=80, verbose_name="路線カナ")
     line_full_name = models.CharField(max_length=80, blank=True, null=True, verbose_name="路線名称(正式名称)")
@@ -45,8 +45,8 @@ class Route(BaseModel):
     line_type = models.CharField(
         max_length=1, blank=True, null=True, choices=constants.CHOICE_STATION_LINE_TYPE, verbose_name="路線区分"
     )
-    lng = models.FloatField(blank=True, null=True, verbose_name="路線表示時の中央経度")
-    lat = models.FloatField(blank=True, null=True, verbose_name="路線表示時の中央緯度")
+    center_lng = models.FloatField(blank=True, null=True, verbose_name="路線表示時の中央経度")
+    center_lat = models.FloatField(blank=True, null=True, verbose_name="路線表示時の中央緯度")
     zoom = models.IntegerField(blank=True, null=True, verbose_name="路線表示時のGoogleMap倍率")
     status = models.CharField(
         max_length=1, blank=True, null=True, choices=constants.CHOICE_STATION_STATUS, verbose_name="状態"
@@ -69,7 +69,7 @@ class Station(BaseModel):
     station_name = models.CharField(max_length=80, verbose_name="駅名称")
     station_kana = models.CharField(max_length=80, blank=True, null=True, verbose_name="駅カナ")
     station_name_en = models.CharField(max_length=80, blank=True, null=True, verbose_name="駅カナ")
-    line_code = models.IntegerField(verbose_name="路線コード")
+    route = models.ForeignKey(Route, db_column='line_code', on_delete=models.PROTECT, verbose_name="路線")
     pref_code = models.CharField(max_length=2, verbose_name="都道府県コード")
     post_code = models.CharField(max_length=8, blank=True, null=True, verbose_name="駅郵便番号")
     address = models.CharField(max_length=300, blank=True, null=True, verbose_name="住所")
@@ -94,16 +94,20 @@ class Station(BaseModel):
 
 
 class JoinStation(BaseModel):
-    line_code = models.IntegerField(verbose_name="路線コード")
-    station_code1 = models.IntegerField(verbose_name="駅コード１")
-    station_code2 = models.IntegerField(verbose_name="駅コード２")
+    route = models.ForeignKey(Route, db_column='line_code', on_delete=models.PROTECT, verbose_name="路線コード")
+    station1 = models.ForeignKey(
+        Station, db_column='station_code1', on_delete=models.PROTECT, related_name='join_station1_set',
+        verbose_name="駅コード１"
+    )
+    station2 = models.ForeignKey(
+        Station, db_column='station_code2', on_delete=models.PROTECT, related_name='join_station2_set',
+        verbose_name="駅コード２"
+    )
 
     class Meta:
         db_table = 'gis_join_station'
         default_permissions = ()
-        ordering = ('line_code', 'station_code1', 'station_code2')
+        ordering = ('route', 'station1', 'station2')
         verbose_name = "接続駅"
         verbose_name_plural = "接続駅一覧"
 
-    def __str__(self):
-        return '{} - {}'.format(self.station_code1, self.station_code2)

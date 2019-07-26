@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from django.core.validators import RegexValidator, validate_comma_separated_integer_list
 
 from utils import constants
-from utils.models import BaseModel
+from utils.base_models import BaseModel
 
 
 # Create your models here.

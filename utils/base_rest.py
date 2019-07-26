@@ -89,11 +89,6 @@ class GeoSearchMixin(object):
         ),)
         queryset = self.filter_queryset(self.get_queryset()).filter(mpoly__intersects=mpoly)
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_geo_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_geo_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -117,11 +112,16 @@ class BaseReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet, GeoSearchMixin):
     filter_backends = [SearchFilter]
 
 
+class BaseModelViewSet(viewsets.ModelViewSet, GeoSearchMixin):
+
+    filter_backends = [SearchFilter]
+
+
 class BaseModelSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(BaseModelSerializer, self).to_representation(instance)
-        for name in ('created_date', 'updated_date', 'is_deleted', 'deleted_date'):
+        for name in ('created_dt', 'updated_dt', 'is_deleted', 'deleted_dt'):
             if name in data:
                 del data[name]
         return data

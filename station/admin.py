@@ -15,7 +15,7 @@ class CompanyAdmin(BaseGeoAdmin):
 
 @admin.register(models.Route)
 class RouteAdmin(BaseGeoAdmin):
-    list_display = ('line_code', 'line_name', 'line_type', 'status')
+    list_display = ('line_code', 'line_name', 'company', 'line_type', 'status')
     list_display_links = ('line_code', 'line_name')
     list_filter = ('line_type', 'status')
     search_fields = ('line_name',)
@@ -23,7 +23,8 @@ class RouteAdmin(BaseGeoAdmin):
 
 @admin.register(models.Station)
 class StationAdmin(BaseGeoAdmin):
-    list_display = ('station_code', 'station_name', 'address', 'status')
+    list_display = ('station_code', 'station_name', 'route', 'address', 'status')
     list_display_links = ('station_code', 'station_name')
     list_filter = ('status',)
     search_fields = ('station_name', 'address')
+

@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),
     # url(r'^api/', include(router.urls)),
     url(r'^api/addr/', include('addr.urls')),
+    url(r'^api/station/', include('station.urls')),
     url(r'^api/geo/', include('geo.urls')),
 ]
