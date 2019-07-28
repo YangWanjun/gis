@@ -8,7 +8,7 @@ from utils.base_models import BaseModel
 # Create your models here.
 class Pref(BaseModel):
     pref_code = models.CharField(max_length=2, primary_key=True, verbose_name="都道府県番号")
-    pref_name = models.CharField(max_length=20, unique=True, verbose_name="都道府県名称")
+    pref_name = models.CharField(max_length=20, verbose_name="都道府県名称")
     people_count = models.IntegerField(blank=True, null=True, verbose_name="人口")
     family_count = models.IntegerField(blank=True, null=True, verbose_name="世帯数")
     mpoly = models.MultiPolygonField(srid=4326, blank=True, null=True)
