@@ -25,9 +25,9 @@ class Pref(BaseModel):
 
 
 class City(BaseModel):
-    pref_code = models.CharField(max_length=2, default='01', verbose_name="都道府県番号")
+    pref_code = models.CharField(max_length=2, verbose_name="都道府県番号")
     pref_name = models.CharField(max_length=20, verbose_name="都道府県名称")
-    city_code = models.CharField(max_length=5, blank=True, null=True, verbose_name="市区町村番号")
+    city_code = models.CharField(max_length=5, primary_key=True, verbose_name="市区町村番号")
     city_name = models.CharField(max_length=30, verbose_name="市区町村名称")
     city_name_en = models.CharField(max_length=50, blank=True, null=True, verbose_name="市区町村名称（英語）")
     gun_name = models.CharField(max_length=30, blank=True, null=True, verbose_name="郡名（町村部のみ）")
