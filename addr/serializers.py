@@ -45,3 +45,10 @@ class ChomeLayerSerializer(BaseGeoFeatureModelSerializer):
         model = models.Chome
         geo_field = 'mpoly'
         fields = '__all__'
+
+
+class PostcodeSerializer(BaseModelSerializer):
+
+    class Meta:
+        model = models.Postcode
+        fields = '__all__'

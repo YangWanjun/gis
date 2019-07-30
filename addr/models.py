@@ -117,14 +117,15 @@ class Chome(BaseModel):
 
 
 class Postcode(BaseModel):
-    city_code = models.CharField(
-        max_length=5, validators=(RegexValidator(regex=r"^\d{5}$"),), verbose_name=u"市区町村コード"
-    )
     post_code = models.CharField(
-        max_length=7, validators=(RegexValidator(regex=constants.REG_POST_CODE),), verbose_name=u"郵便番号"
+        max_length=7, validators=(RegexValidator(regex=constants.REG_POST_CODE),), verbose_name="郵便番号"
     )
+    pref_code = models.CharField(max_length=2, verbose_name="都道府県コード")
     pref_name = models.CharField(max_length=15, verbose_name="都道府県名称")
     pref_kana = models.CharField(max_length=50, verbose_name="度道府県カナ")
+    city_code = models.CharField(
+        max_length=5, validators=(RegexValidator(regex=r"^\d{5}$"),), verbose_name="市区町村コード"
+    )
     city_name = models.CharField(max_length=50, verbose_name="市区町村名称")
     city_kana = models.CharField(max_length=50, verbose_name="市区町村カナ")
     town_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="町域名称")
@@ -148,7 +149,7 @@ class Postcode(BaseModel):
 
     class Meta:
         db_table = 'gis_post_code'
-        indexes = [models.Index(fields=['post_code']),]
+        indexes = [models.Index(fields=['post_code'])]
         default_permissions = ()
         verbose_name = "郵便番号"
         verbose_name_plural = '郵便番号一覧'

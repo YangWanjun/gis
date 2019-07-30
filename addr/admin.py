@@ -25,3 +25,9 @@ class ChomeAdmin(BaseGeoAdmin):
     list_display = ('pref_name', 'city_name', 'chome_code', 'chome_name')
     list_display_links = ('chome_code', 'chome_name')
     search_fields = ('chome_code', 'chome_name')
+
+
+@admin.register(models.Postcode)
+class PostcodeAdmin(BaseGeoAdmin):
+    list_display = ('post_code', 'pref_name', 'city_name', 'town_name')
+    search_fields = ('post_code', 'pref_name', 'city_name', 'town_name')
