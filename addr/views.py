@@ -18,7 +18,7 @@ class CityViewSet(NestedViewSetMixin, BaseReadOnlyModelViewSet):
     queryset = models.City.objects.all()
     serializer_class = serializers.CitySerializer
     geo_serializer_class = serializers.CityLayerSerializer
-    search_fields = ('pref_code', 'pref_name', 'city_code', 'city_name')
+    search_fields = ('pref__pref_code', 'pref_name', 'city_code', 'city_name')
 
     def list(self, request, *args, **kwargs):
         return super(CityViewSet, self).list(request, *args, **kwargs)
@@ -31,7 +31,7 @@ class ChomeViewSet(NestedViewSetMixin, BaseReadOnlyModelViewSet):
     queryset = models.Chome.objects.all()
     serializer_class = serializers.ChomeSerializer
     geo_serializer_class = serializers.ChomeLayerSerializer
-    search_fields = ('pref_code', 'pref_name', 'city_code', 'city_name', 'chome_code', 'chome_name')
+    search_fields = ('pref__pref_code', 'pref_name', 'city__city_code', 'city_name', 'chome_code', 'chome_name')
 
     def list(self, request, *args, **kwargs):
         return super(ChomeViewSet, self).list(request, *args, **kwargs)

@@ -9,14 +9,19 @@ pref_router.register(
     r'city',
     views.CityViewSet,
     basename='pref-city',
-    parents_query_lookups=['pref_code'],
+    parents_query_lookups=['pref'],
+).register(
+    r'chome',
+    views.ChomeViewSet,
+    basename='pref-city-chome',
+    parents_query_lookups=['pref', 'city'],
 )
 city_router = router.register(r'city', views.CityViewSet)
 city_router.register(
     r'chome',
     views.ChomeViewSet,
     basename='pref-city-chome',
-    parents_query_lookups=['city_code'],
+    parents_query_lookups=['city'],
 )
 router.register(r'chome', views.ChomeViewSet)
 

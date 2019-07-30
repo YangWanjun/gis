@@ -25,7 +25,7 @@ class Pref(BaseModel):
 
 
 class City(BaseModel):
-    pref_code = models.CharField(max_length=2, verbose_name="都道府県番号")
+    pref = models.ForeignKey(Pref, db_column='pref_code', on_delete=models.PROTECT, verbose_name="都道府県番号")
     pref_name = models.CharField(max_length=20, verbose_name="都道府県名称")
     city_code = models.CharField(max_length=5, primary_key=True, verbose_name="市区町村番号")
     city_name = models.CharField(max_length=30, verbose_name="市区町村名称")
@@ -77,9 +77,9 @@ class City(BaseModel):
 
 
 class Chome(BaseModel):
-    pref_code = models.CharField(max_length=2, verbose_name="都道府県番号")
+    pref = models.ForeignKey(Pref, db_column='pref_code', on_delete=models.PROTECT, verbose_name="都道府県番号")
     pref_name = models.CharField(max_length=20, verbose_name="都道府県名称")
-    city_code = models.CharField(max_length=5, verbose_name="市区町村番号")
+    city = models.ForeignKey(City, db_column='city_code', on_delete=models.PROTECT, verbose_name="市区町村番号")
     city_name = models.CharField(max_length=20, verbose_name="市区町村名称")
     chome_code = models.CharField(max_length=12, verbose_name="大字町丁目番号")
     chome_name = models.CharField(max_length=30, verbose_name="大字町丁目名称")

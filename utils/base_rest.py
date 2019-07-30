@@ -44,7 +44,7 @@ def custom_exception_handler(exc, context):
 class GeoSearchMixin(object):
     geo_serializer_class = None
 
-    def check_boundary(self, request):
+    def check_boundary(self, request, *args, **kwargs):
         """レイヤー表示時、パフォーマンスを上がるため、ズームレベルと境界が必要です。
 
         :param request:
