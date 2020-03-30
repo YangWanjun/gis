@@ -24,6 +24,7 @@ city_router.register(
     parents_query_lookups=['city'],
 )
 router.register(r'chome', views.ChomeViewSet)
+router.register(r'postcode', views.PostcodeViewSet)
 
 urlpatterns = [
 ]

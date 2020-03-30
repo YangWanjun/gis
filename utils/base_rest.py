@@ -107,14 +107,21 @@ class GeoSearchMixin(object):
         return self.geo_serializer_class
 
 
-class BaseReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet, GeoSearchMixin):
+class BaseReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+
+
+class BaseReadOnlyModelLayerViewSet(BaseReadOnlyModelViewSet, GeoSearchMixin):
+    pass
+
+
+class BaseModelViewSet(viewsets.ModelViewSet):
 
     filter_backends = [SearchFilter]
 
 
-class BaseModelViewSet(viewsets.ModelViewSet, GeoSearchMixin):
-
-    filter_backends = [SearchFilter]
+class BaseModelLayerViewSet(BaseModelViewSet, GeoSearchMixin):
+    pass
 
 
 class BaseModelSerializer(serializers.ModelSerializer):
