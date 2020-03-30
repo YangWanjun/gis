@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from . import models
 from utils.base_rest import BaseGeoFeatureModelSerializer, BaseModelSerializer
 
@@ -48,6 +50,7 @@ class ChomeLayerSerializer(BaseGeoFeatureModelSerializer):
 
 
 class PostcodeSerializer(BaseModelSerializer):
+    address = serializers.CharField(read_only=True, label='住所')
 
     class Meta:
         model = models.Postcode
