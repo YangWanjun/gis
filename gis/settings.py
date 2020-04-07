@@ -31,7 +31,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:3000',
     'http://192.168.99.100:8001',
 )
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
