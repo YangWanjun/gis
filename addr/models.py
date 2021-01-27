@@ -76,13 +76,13 @@ class City(BaseModel):
 #         return self.name
 
 
-class Chome(BaseModel):
+class Town(BaseModel):
     pref = models.ForeignKey(Pref, db_column='pref_code', on_delete=models.PROTECT, verbose_name="都道府県番号")
     pref_name = models.CharField(max_length=20, verbose_name="都道府県名称")
     city = models.ForeignKey(City, db_column='city_code', on_delete=models.PROTECT, verbose_name="市区町村番号")
     city_name = models.CharField(max_length=20, verbose_name="市区町村名称")
-    chome_code = models.CharField(max_length=12, verbose_name="大字町丁目番号")
-    chome_name = models.CharField(max_length=30, verbose_name="大字町丁目名称")
+    town_code = models.CharField(max_length=12, verbose_name="大字町丁目番号")
+    town_name = models.CharField(max_length=30, verbose_name="大字町丁目名称")
     category = models.IntegerField(blank=True, null=True, choices=constants.CHOICE_CHOME_CATEGORY, verbose_name="分類コード")
     special_symbol_e = models.CharField(max_length=5, blank=True, null=True, verbose_name="特殊記号E（町丁・字等重複フラグ）")
     area = models.IntegerField(blank=True, null=True, verbose_name="面積（㎡）")
@@ -102,18 +102,18 @@ class Chome(BaseModel):
     mpoly = models.MultiPolygonField(srid=4326, blank=True, null=True)
 
     class Meta:
-        db_table = 'gis_chome'
+        db_table = 'gis_town'
         indexes = (
-            models.Index(fields=('chome_code',)),
-            models.Index(fields=('chome_name',)),
+            models.Index(fields=('town_code',)),
+            models.Index(fields=('town_name',)),
         )
         default_permissions = ()
-        ordering = ('chome_code',)
+        ordering = ('town_code',)
         verbose_name = "大字町丁目"
         verbose_name_plural = "大字町丁目一覧"
 
     def __str__(self):
-        return self.chome_name
+        return self.town_name
 
 
 class Postcode(BaseModel):

@@ -1,7 +1,7 @@
 import os
 
 from django.contrib.gis.utils import LayerMapping
-from addr.models import Chome
+from addr.models import Town
 
 
 boundary_mapping = {
@@ -9,8 +9,8 @@ boundary_mapping = {
     'pref_name': 'PREF_NAME',
     'city_code': 'CITY',
     'city_name': 'CITY_NAME',
-    'chome_code': 'KEY_CODE',
-    'chome_name': 'S_NAME',
+    'town_code': 'KEY_CODE',
+    'town_name': 'S_NAME',
     'category': 'HCODE',
     'special_symbol_e': 'KIGO_E',
     'area': 'AREA',
@@ -31,7 +31,7 @@ def run(path, verbose=True):
             if not name.endswith('.shp'):
                 continue
             shp_file = os.path.join(path, name)
-            lm = LayerMapping(Chome, shp_file, boundary_mapping, transform=False)
+            lm = LayerMapping(Town, shp_file, boundary_mapping, transform=False)
             lm.save(strict=True, verbose=verbose)
     else:
         print('指定されたフォルダーが存在しません。')

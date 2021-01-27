@@ -34,17 +34,17 @@ class CityLayerSerializer(BaseGeoFeatureModelSerializer):
         fields = '__all__'
 
 
-class ChomeSerializer(BaseModelSerializer):
+class TownSerializer(BaseModelSerializer):
 
     class Meta:
-        model = models.Chome
+        model = models.Town
         exclude = ('mpoly',)
 
 
-class ChomeLayerSerializer(BaseGeoFeatureModelSerializer):
+class TownLayerSerializer(BaseGeoFeatureModelSerializer):
 
     class Meta:
-        model = models.Chome
+        model = models.Town
         geo_field = 'mpoly'
         fields = '__all__'
 

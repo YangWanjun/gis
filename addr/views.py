@@ -28,14 +28,14 @@ class CityViewSet(NestedViewSetMixin, BaseReadOnlyModelLayerViewSet):
         return super(CityViewSet, self).retrieve(request, *args, **kwargs)
 
 
-class ChomeViewSet(NestedViewSetMixin, BaseReadOnlyModelLayerViewSet):
-    queryset = models.Chome.objects.all()
-    serializer_class = serializers.ChomeSerializer
-    geo_serializer_class = serializers.ChomeLayerSerializer
-    search_fields = ('pref__pref_code', 'pref_name', 'city__city_code', 'city_name', 'chome_code', 'chome_name')
+class TownViewSet(NestedViewSetMixin, BaseReadOnlyModelLayerViewSet):
+    queryset = models.Town.objects.all()
+    serializer_class = serializers.TownSerializer
+    geo_serializer_class = serializers.TownLayerSerializer
+    search_fields = ('pref__pref_code', 'pref_name', 'city__city_code', 'city_name', 'town_code', 'town_name')
 
     def list(self, request, *args, **kwargs):
-        return super(ChomeViewSet, self).list(request, *args, **kwargs)
+        return super(TownViewSet, self).list(request, *args, **kwargs)
 
 
 class PostcodeViewSet(BaseReadOnlyModelViewSet):

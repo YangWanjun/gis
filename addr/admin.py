@@ -20,11 +20,11 @@ class CityAdmin(BaseGeoAdmin):
     list_filter = ('pref_name',)
 
 
-@admin.register(models.Chome)
-class ChomeAdmin(BaseGeoAdmin):
-    list_display = ('pref_name', 'city_name', 'chome_code', 'chome_name')
-    list_display_links = ('chome_code', 'chome_name')
-    search_fields = ('chome_code', 'chome_name')
+@admin.register(models.Town)
+class TownAdmin(BaseGeoAdmin):
+    list_display = ('pref_name', 'city_name', 'town_code', 'town_name')
+    list_display_links = ('town_code', 'town_name')
+    search_fields = ('town_code', 'town_name')
 
 
 @admin.register(models.Postcode)
