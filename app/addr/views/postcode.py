@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_cors import cross_origin
 
-from app.addr.models.postcode import Postcode
+from ..models.postcode import Postcode
 
 postcode = Blueprint('postcode', __name__, url_prefix='/api/addr/postcode')
 

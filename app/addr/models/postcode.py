@@ -1,4 +1,4 @@
-from app.addr.models import db
+from . import db
 
 
 class Postcode(db.Model):

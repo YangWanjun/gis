@@ -3,8 +3,8 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from werkzeug.routing import BaseConverter
 
-from app.addr.models import db
-from app.addr.views.postcode import postcode
+from .addr.models import db
+from .addr.views.postcode import postcode
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.py')
@@ -31,4 +31,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
