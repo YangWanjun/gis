@@ -56,13 +56,13 @@ class Station(BaseModel):
         ForeignKey(Route.line_code, onupdate='CASCADE', ondelete='RESTRICT'),
         comment="路線"
     )
-    route = relationship(Route)
+    route = relationship(Route, lazy='joined')
     pref_code = Column(
         'pref_code', String(2),
         ForeignKey(Pref.pref_code, onupdate='CASCADE', ondelete='RESTRICT'),
         comment="都道府県コード"
     )
-    pref = relationship(Pref)
+    pref = relationship(Pref, lazy='joined')
     post_code = Column(String(8), nullable=True, comment="駅郵便番号")
     address = Column(String(300), nullable=True, comment="住所")
     lng = Column(Float, nullable=True, comment="経度")
@@ -80,6 +80,8 @@ class Station(BaseModel):
             'lat': self.lat,
             'pref_code': self.pref_code,
             'pref_name': self.pref.pref_name,
+            'line_code': self.line_code,
+            'line_name': self.route.line_name,
         }
 
 

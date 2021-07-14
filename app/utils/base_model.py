@@ -24,7 +24,10 @@ class ChoiceType(types.TypeDecorator):
         return [k for k, v in self.choices.items() if v == value][0]
 
     def process_result_value(self, value, dialect):
-        return self.choices[value]
+        if value in self.choices:
+            return self.choices[value]
+        else:
+            return None
 
 
 class IntChoiceType(ChoiceType):
