@@ -5,6 +5,7 @@ from werkzeug.routing import BaseConverter
 
 from .addr.models import db
 from .addr.views.postcode import postcode
+from .station.views.station import station
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.py')
@@ -20,6 +21,7 @@ class RegexConverter(BaseConverter):
 app.url_map.converters['regex'] = RegexConverter
 
 app.register_blueprint(postcode)
+app.register_blueprint(station)
 
 db.init_app(app)
 Migrate(app, db)
@@ -31,4 +33,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
